@@ -35,6 +35,25 @@ namespace SoundCloudDownloader.Services
             return jsonResult?.HttpUrl;
         }
 
+        #region MeteData Methods
+
+        private string GetTitle(string html)
+        {
+            return GetMetaContent(html, "description");
+        }
+
+        private string GetPlayer(string html)
+        {
+            return GetMetaContent(html, "twitter:player");
+        }
+
+        private string GetCoverImageUrl(string html)
+        {
+            return GetMetaContent(html, "twitter:image:src");
+        }
+
+        #endregion
+
         #region Helpers
 
         private string GetClientId(string html)
@@ -53,6 +72,13 @@ namespace SoundCloudDownloader.Services
         {
             string appVersion = html.Substring(html.IndexOf("A.start('")).Replace("A.start('", "");
             return appVersion.Substring(0, appVersion.IndexOf("'")).Replace("'", "");
+        }
+
+        private string GetMetaContent(string html, string propertyName)
+        {
+            string start_key = $@"<meta property=""{propertyName}"" content=""";
+            string titleMeta = html.Substring(html.IndexOf(start_key)).Replace(start_key, "");
+            return titleMeta.Substring(0, titleMeta.IndexOf(@"""")).Replace(@"""", "");
         }
 
         #endregion
