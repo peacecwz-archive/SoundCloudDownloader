@@ -25,7 +25,7 @@ namespace SoundCloudDownloader.Services
             }
         }
 
-        public async Task<DownloadTrackModel> GetStreamUrlAsync(string url)
+        public async Task<DownloadTrackModel> GetTrack(string url)
         {
             Uri soundCloudUrl = new Uri(url);
             url = $"https://m.soundcloud.com{soundCloudUrl.LocalPath}";
