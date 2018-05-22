@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SoundCloudDownloader.Models
 {
-    public class SoundCloudJSONResponse
+    public class SoundCloudModel
     {
         [JsonProperty("http_mp3_128_url")]
         public string HttpUrl { get; set; }
