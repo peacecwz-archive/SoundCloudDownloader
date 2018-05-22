@@ -1,15 +1,16 @@
 import { fetch, addTask } from 'domain-task';
 import { Action, Reducer, ActionCreator } from 'redux';
 import { AppThunkAction } from './';
+import DownloadTrackModel from 'ClientApp/models/downloaderTrack';
 
 export interface DownloaderState {
     isLoading: boolean;
-    downloadUrl?: string;
+    track?: DownloadTrackModel;
 }
 
 interface DownloadedUrlAction {
     type: 'DOWNLOADED_URL';
-    downloadUrl: string;
+    track?: DownloadTrackModel;
 }
 
 interface DownloadingUrlAction {
@@ -17,27 +18,31 @@ interface DownloadingUrlAction {
     isLoading: boolean;
 }
 
-
 type KnownAction = DownloadingUrlAction | DownloadedUrlAction;
 
 
 export const actionCreators = {
     downloadMusic: (url: string): AppThunkAction<KnownAction> => (dispatch, getState) => {
         dispatch({
-            type: 'DOWNLOADING_URL', isLoading: true
+            type: 'DOWNLOADING_URL',
+            isLoading: true
         });
         let fetchTask = fetch(`api/downloader/create?url=${url}`)
             .then(response => response.json() as Promise<string>)
             .then(data => {
-                console.log(data);
-                dispatch({ type: 'DOWNLOADED_URL', downloadUrl: data });
+                dispatch({
+                    type: 'DOWNLOADED_URL',
+                    track: new DownloadTrackModel(data)
+                });
             });
 
         addTask(fetchTask);
     }
 };
 
-const unloadedState: DownloaderState = { downloadUrl: "", isLoading: false };
+const unloadedState: DownloaderState = {
+    isLoading: false
+};
 
 export const reducer: Reducer<DownloaderState> = (state: DownloaderState, incomingAction: Action) => {
     const action = incomingAction as KnownAction;
@@ -48,7 +53,7 @@ export const reducer: Reducer<DownloaderState> = (state: DownloaderState, incomi
             };
         case 'DOWNLOADED_URL':
             return {
-                downloadUrl: action.downloadUrl,
+                track: action.track,
                 isLoading: false
             };
         default:
