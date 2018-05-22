@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { ApplicationState } from '../store';
 import * as DownloaderStore from '../store/Downloader';
 
-// At runtime, Redux will merge together...
 type DownloaderProps =
-    DownloaderStore.DownloaderState        // ... state we've requested from the Redux store
-    & typeof DownloaderStore.actionCreators      // ... plus action creators we've requested
-    & RouteComponentProps<{ }>; // ... plus incoming routing parameters
+    DownloaderStore.DownloaderState       
+    & typeof DownloaderStore.actionCreators   
+    & RouteComponentProps<{ }>; 
 
 class DownloaderPage extends React.Component<DownloaderProps, {}> {
     public componentWillMount() {
@@ -16,7 +15,7 @@ class DownloaderPage extends React.Component<DownloaderProps, {}> {
     }
 
     private startToDownload() {
-        this.props.downloadMusic("https://soundcloud.com/indre-dromantaite/sex-on-fire-vijay-sofia-zlatko-edit");
+        this.props.downloadMusic("https://soundcloud.com/peacecwz/skrillex-diplo-vs-florence-the-machine-where-are-u-now-vs-you-got-the-love-peacecwz-mashup");
     }
 
     public render() {
@@ -27,6 +26,6 @@ class DownloaderPage extends React.Component<DownloaderProps, {}> {
 }
 
 export default connect(
-    (state: ApplicationState) => state.downloader, // Selects which state properties are merged into the component's props
-    DownloaderStore.actionCreators                 // Selects which action creators are merged into the component's props
+    (state: ApplicationState) => state.downloader, 
+    DownloaderStore.actionCreators                
 )(DownloaderPage) as typeof DownloaderPage;
