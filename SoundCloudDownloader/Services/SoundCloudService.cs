@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using SoundCloudDownloader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,15 +25,22 @@ namespace SoundCloudDownloader.Services
             }
         }
 
-        public async Task<string> GetStreamUrlAsync(string url)
+        public async Task<DownloadTrackModel> GetStreamUrlAsync(string url)
         {
             Uri soundCloudUrl = new Uri(url);
             url = $"https://m.soundcloud.com{soundCloudUrl.LocalPath}";
             string html = await Client.GetStringAsync(url);
             string streamJsonUrl = "https://" + $"api.soundcloud.com/i1/tracks/{GetTrackId(html)}/streams?client_id={GetClientId(html)}&format=json&app_version={GetAppVersion(html)}";
-            Models.SoundCloudJSONResponse jsonResult = JsonConvert.DeserializeObject<Models.SoundCloudJSONResponse>(await Client.GetStringAsync(streamJsonUrl));
+            SoundCloudModel jsonResult = JsonConvert.DeserializeObject<SoundCloudModel>(await Client.GetStringAsync(streamJsonUrl));
 
-            return jsonResult?.HttpUrl;
+            return new DownloadTrackModel()
+            {
+                Title = GetTitle(html),
+                PreviewUrl = jsonResult.PreviewUrl,
+                DownloadUrl = jsonResult.HttpUrl,
+                PlayerEmbed = GetPlayer(html),
+                ImageUrl = GetCoverImageUrl(html)
+            };
         }
 
         #region MeteData Methods
