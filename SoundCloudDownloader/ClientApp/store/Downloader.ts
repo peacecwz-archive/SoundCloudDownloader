@@ -40,6 +40,7 @@ export const actionCreators = {
         let fetchTask = fetch(`api/downloader/create?url=${url}`)
             .then(response => response.json() as Promise<string>)
             .then(data => {
+                console.log(data);
                 dispatch({ type: 'DOWNLOADED_URL', downloadUrl: data });
             });
 

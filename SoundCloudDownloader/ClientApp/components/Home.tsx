@@ -11,11 +11,17 @@ type DownloaderProps =
     & RouteComponentProps<{ }>; // ... plus incoming routing parameters
 
 class DownloaderPage extends React.Component<DownloaderProps, {}> {
+    public componentWillMount() {
+        this.startToDownload();
+    }
+
+    private startToDownload() {
+        this.props.downloadMusic("https://soundcloud.com/indre-dromantaite/sex-on-fire-vijay-sofia-zlatko-edit");
+    }
 
     public render() {
         return <div>
-            <h1>Weather forecast</h1>
-            <p>This component demonstrates fetching data from the server and working with URL parameters.</p>
+            {this.props.isLoading ? <p>Loading...</p> : <p>{this.props.downloadUrl}</p>}
         </div>;
     }
 }
