@@ -21,7 +21,7 @@ namespace SoundCloudDownloader.Api
         [HttpGet("create")]
         public async Task<IActionResult> Create(string url)
         {
-            return Ok(await _soundCloudService.GetStreamUrlAsync(url));
+            return Ok(await _soundCloudService.GetTrack(url));
         }
     }
 }
