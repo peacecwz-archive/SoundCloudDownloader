@@ -8,6 +8,6 @@ namespace SoundCloudDownloader.Services
 {
     public interface ISoundCloudService
     {
-        Task<DownloadTrackModel> GetStreamUrlAsync(string url);
+        Task<DownloadTrackModel> GetTrack(string url);
     }
 }
