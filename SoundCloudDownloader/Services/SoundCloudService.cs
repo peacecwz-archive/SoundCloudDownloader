@@ -24,6 +24,19 @@ namespace SoundCloudDownloader.Services
             }
         }
 
+        public async Task<string> GetStreamUrlAsync(string url)
+        {
+            Uri soundCloudUrl = new Uri(url);
+            url = $"https://m.soundcloud.com{soundCloudUrl.LocalPath}";
+            string html = await Client.GetStringAsync(url);
+            string streamJsonUrl = "https://" + $"api.soundcloud.com/i1/tracks/{GetTrackId(html)}/streams?client_id={GetClientId(html)}&format=json&app_version={GetAppVersion(html)}";
+            Models.SoundCloudJSONResponse jsonResult = JsonConvert.DeserializeObject<Models.SoundCloudJSONResponse>(await Client.GetStringAsync(streamJsonUrl));
+
+            return jsonResult?.HttpUrl;
+        }
+
+        #region Helpers
+
         private string GetClientId(string html)
         {
             string clientId = html.Substring(html.IndexOf(@"{client_id:""")).Replace(@"{client_id:""", "");
@@ -34,7 +47,6 @@ namespace SoundCloudDownloader.Services
         {
             string trackId = html.Substring(html.IndexOf(@"content=""soundcloud://sounds:")).Replace(@"content=""soundcloud://sounds:", "");
             return trackId.Substring(0, trackId.IndexOf("\"")).Replace("\"", "");
-
         }
 
         private string GetAppVersion(string html)
@@ -43,14 +55,6 @@ namespace SoundCloudDownloader.Services
             return appVersion.Substring(0, appVersion.IndexOf("'")).Replace("'", "");
         }
 
-        public async Task<string> GetStreamUrlAsync(string url)
-        {
-            Uri soundCloudUrl = new Uri(url);
-            url = $"https://m.soundcloud.com{soundCloudUrl.LocalPath}";
-            string html = await Client.GetStringAsync(url);
-            string streamJsonUrl = $"https://api.soundcloud.com/i1/tracks/{GetTrackId(html)}/streams?client_id={GetClientId(html)}&format=json&app_version={GetAppVersion(html)}";
-            Models.SoundCloudJSONResponse jsonResult = JsonConvert.DeserializeObject<Models.SoundCloudJSONResponse>(await Client.GetStringAsync(streamJsonUrl));
-            return jsonResult?.HttpUrl;
-        }
+        #endregion
     }
 }
