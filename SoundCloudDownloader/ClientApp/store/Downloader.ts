@@ -1,16 +1,16 @@
 import { fetch, addTask } from 'domain-task';
 import { Action, Reducer, ActionCreator } from 'redux';
 import { AppThunkAction } from './';
-import DownloadTrackModel from 'ClientApp/models/downloaderTrack';
+import DownloadTrackModel from '../models/downloaderTrack';
 
 export interface DownloaderState {
     isLoading: boolean;
-    track?: DownloadTrackModel;
+    track: DownloadTrackModel;
 }
 
 interface DownloadedUrlAction {
     type: 'DOWNLOADED_URL';
-    track?: DownloadTrackModel;
+    track: DownloadTrackModel;
 }
 
 interface DownloadingUrlAction {
@@ -41,7 +41,8 @@ export const actionCreators = {
 };
 
 const unloadedState: DownloaderState = {
-    isLoading: false
+    isLoading: false,
+    track: new DownloadTrackModel({})
 };
 
 export const reducer: Reducer<DownloaderState> = (state: DownloaderState, incomingAction: Action) => {
@@ -49,7 +50,8 @@ export const reducer: Reducer<DownloaderState> = (state: DownloaderState, incomi
     switch (action.type) {
         case 'DOWNLOADING_URL':
             return {
-                isLoading: true
+                isLoading: true,
+                track: new DownloadTrackModel({})
             };
         case 'DOWNLOADED_URL':
             return {
