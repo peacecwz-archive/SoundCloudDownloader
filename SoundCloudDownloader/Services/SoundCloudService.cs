@@ -47,7 +47,12 @@ namespace SoundCloudDownloader.Services
 
         private string GetTitle(string html)
         {
-            return GetMetaContent(html, "description");
+            return GetMetaContent(html, "twitter:title");
+        }
+
+        private string GetArtistName(string html)
+        {
+            return GetMetaContent(html, "twitter:audio:artist_name");
         }
 
         private string GetPlayer(string html)
