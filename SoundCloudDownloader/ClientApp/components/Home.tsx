@@ -32,11 +32,12 @@ class DownloaderPage extends React.Component<DownloaderProps, State> {
                     trackUrl: e.target.value
                 })} />
                 <button onClick={this.startToDownload.bind(this)}>Convert</button>
-                {this.props.isLoading ? (
-                    <div className="results popup">
-                        <span className='popuptext' id='message'>Message</span>
-                        <div className='loader' id='loading'></div>
-                    </div>) : null}
+                {this.props.track != null ? (
+                    <div>
+                        <p><b>Track Name: </b>{this.props.track.title}</p>
+                        <p><b>Track Name: </b>{this.props.track.downloadUrl}</p>
+                    </div>
+                ): null}
             </div>
         );
     }
